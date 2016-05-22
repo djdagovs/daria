@@ -64,7 +64,7 @@ function sys_linux() {
 	if (false === ($str = @file("/proc/loadavg"))) return false;
 	$str = explode(" ", implode("", $str));
 	$str = array_chunk($str, 3);
-	$res['loadAvg'] = implode(" ", $str[0]);
+	$res['loadAvg'] = implode("&nbsp;&nbsp;&nbsp;", $str[0]);
 
 	return $res;
 }

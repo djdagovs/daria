@@ -136,6 +136,17 @@ include |ROOT|."inc/functions.php";
 		<a class="item"><?php echo getPortStatus('|HOSTNAME|','21'); ?>FTP: </a>
 		<a class="item"><div class="ui blue label"><?php echo PHP_VERSION; ?></div>PHP: </a>
 		<a class="item"><div class="ui blue label"><?php echo zend_version(); ?></div>Zend: </a>
+
+		<?php
+		if (phpversion('suhosin')) {
+		?>
+		<a class="item"><div class="ui blue label"><?php echo phpversion('suhosin'); ?></div>Suhosin: </a>
+		<?php
+		} else {
+		echo '<a class="item"><div class="ui red label"><i class="icon remove"></i></div>Suhosin: </a>';
+		}
+		?>
+
 		<?php
 		if(extension_loaded('ionCube Loader')){
 		?>

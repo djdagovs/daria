@@ -37,8 +37,8 @@ function sys_linux() {
 	$days = floor($hours / 24);
 	$hours = floor($hours - ($days * 24));
 	$min = floor($min - ($days * 60 * 24) - ($hours * 60));
-	if ($days !== 0) $res['uptime'] = $days." Days ";
-	if ($hours !== 0) $res['uptime'] .= ' & ' . $hours." Hours";
+	if ($days != 0) $res['uptime'] = $days." Days ";
+	if ($hours != 0) $res['uptime'] .= ' & ' . $hours." Hours";
 	//$res['uptime'] .= $min." Minutes";
 
 	// MEMORY

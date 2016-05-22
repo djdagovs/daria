@@ -11,7 +11,7 @@ define('ROOT', $root);
 
 $ts = new tsclass();
 
-// ¸ù¾Ý²»Í¬ÏµÍ³È¡µÃCPUÏà¹ØÐÅÏ¢
+// ï¿½ï¿½ï¿½Ý²ï¿½Í¬ÏµÍ³È¡ï¿½ï¿½CPUï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 switch(PHP_OS) {
 	case "Linux":
 		$sysReShow = (false !== ($sysInfo = sys_linux()))?"show":"none";
@@ -20,7 +20,12 @@ switch(PHP_OS) {
 		break;
 }
 
-//linuxÏµÍ³Ì½²â
+function human_filesize($bytes, $decimals = 2) {
+	$size = array('kB','MB','GB','TB','PB','EB','ZB','YB');
+	$factor = floor((strlen($bytes) - 1) / 3);
+	return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$size[$factor];
+}
+
 function sys_linux() {
 
 	// UPTIME
@@ -41,10 +46,10 @@ function sys_linux() {
 	$str = implode("", $str);
 	preg_match_all("/MemTotal\s{0,}\:+\s{0,}([\d\.]+).+?MemFree\s{0,}\:+\s{0,}([\d\.]+).+?Cached\s{0,}\:+\s{0,}([\d\.]+).+?SwapTotal\s{0,}\:+\s{0,}([\d\.]+).+?SwapFree\s{0,}\:+\s{0,}([\d\.]+)/s", $str, $buf);
 
-	$res['memTotal'] = round($buf[1][0]/1024, 2);
-	$res['memFree'] = round($buf[2][0]/1024, 2);
-	$res['memCached'] = round($buf[3][0]/1024, 2);
-	$res['memUsed'] = ($res['memTotal']-$res['memFree']);
+	$res['memTotal'] = human_filesize($buf[1][0]);
+	$res['memFree'] = human_filesize($buf[2][0]);
+	$res['memCached'] = human_filesize($buf[3][0]);
+	$res['memUsed'] = human_filesize($buf[1][0] - $buf[2][0]);
 	$res['memPercent'] = (floatval($res['memTotal'])!=0)?round($res['memUsed']/$res['memTotal']*100,2):0;
 
 	$res['memRealUsed'] = ($res['memTotal'] - $res['memFree'] - $res['memCached']);
@@ -64,18 +69,18 @@ function sys_linux() {
 	return $res;
 }
 
-// ÌÔ±¦¹éÊôµØ²éÑ¯
+// ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø²ï¿½Ñ¯
 function GetiP($ip,$lid = 0,$cid = 0,$num = 0) {
 	$ipapi = @file_get_contents("http://ip.taobao.com/service/getIpInfo.php?ip=".$ip);
 	$ipinfo = json_decode($ipapi, true);
 	
-	$country = $ipinfo['data']['country'];  //¹ú¼Ò
-	$country_id = $ipinfo['data']['country_id'];  //¼ò³Æ
-	$area = $ipinfo['data']['area'];  //ÇøÓò
-	$region = $ipinfo['data']['region'];  //Ê¡·Ý
-	$city = $ipinfo['data']['city'];  //³ÇÊÐ
-	$isp = $ipinfo['data']['isp'];  //ÔËÓªÉÌ
-	$isp_id = $ipinfo['data']['isp_id'];  //ÔËÓªÉÌID
+	$country = $ipinfo['data']['country'];  //ï¿½ï¿½ï¿½ï¿½
+	$country_id = $ipinfo['data']['country_id'];  //ï¿½ï¿½ï¿½
+	$area = $ipinfo['data']['area'];  //ï¿½ï¿½ï¿½ï¿½
+	$region = $ipinfo['data']['region'];  //Ê¡ï¿½ï¿½
+	$city = $ipinfo['data']['city'];  //ï¿½ï¿½ï¿½ï¿½
+	$isp = $ipinfo['data']['isp'];  //ï¿½ï¿½Óªï¿½ï¿½
+	$isp_id = $ipinfo['data']['isp_id'];  //ï¿½ï¿½Óªï¿½ï¿½ID
 	$ips = $ipinfo['data']['ip'];  //IP
 	
 	if ($region == $city) {
@@ -100,7 +105,7 @@ function GetiP($ip,$lid = 0,$cid = 0,$num = 0) {
 	return $add;
 }
 
-//QQÔÚÏß×´Ì¬
+//QQï¿½ï¿½ï¿½ï¿½×´Ì¬
 function get_qq_status($string) {
 	$ch = curl_init();
 	$timeout = 20;
@@ -121,7 +126,7 @@ function get_qq_status($string) {
 	}
 }
 
-// ·þÎñÆ÷¶Ë¿Ú×´Ì¬
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½×´Ì¬
 function getPortStatus($ip,$port) {
 	$fp = @fsockopen($ip, $port, $errno, $errstr, 10);
 	if (!$fp) {
@@ -132,7 +137,7 @@ function getPortStatus($ip,$port) {
  	return $string;
 }
 
-// ÓïÑÔÇÐ»»
+// ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½
 function getLanguages($root) {
     $langdir = $root . "lang/";
     $languages = array();
@@ -147,7 +152,7 @@ function getLanguages($root) {
     return $languages;
 }
 
-// »ñÈ¡ÓòÃûÁÐ±í
+// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 function getDomainsList() {
     global $ts;
     $ret = array();
@@ -162,7 +167,7 @@ function getDomainsList() {
     return $ret;
 }
 
-// »ñÈ¡ÓÃ»§×´Ì¬
+// ï¿½ï¿½È¡ï¿½Ã»ï¿½×´Ì¬
 function getDateCreated() {
     global $ts;
     $ret = array();
